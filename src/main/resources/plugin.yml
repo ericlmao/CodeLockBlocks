@@ -1,0 +1,8 @@
+name: CodeLock
+main: fun.supersmp.codelock.CodeLockPlugin
+version: '${project.version}'
+authors: [ "ericlmao" ]
+api-version: 1.20
+load: POSTWORLD
+
+depend: ["PlaceholderAPI"]
