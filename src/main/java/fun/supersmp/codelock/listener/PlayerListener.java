@@ -10,6 +10,7 @@ import fun.supersmp.codelock.ui.EditCodeMenu;
 import fun.supersmp.codelock.ui.EnterCodeMenu;
 import games.negative.alumina.util.NBTEditor;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -27,6 +28,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.material.PressureSensor;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,11 +96,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onInteract(@NotNull PlayerInteractEvent event) {
-        // Ensure only left-click-block and right-click-block events are handled,
-        // we don't need to handle other events!
-        Action action = event.getAction();
-        if (!action.equals(Action.LEFT_CLICK_BLOCK) && !action.equals(Action.RIGHT_CLICK_BLOCK)) return;
-
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
         if (block == null) return;
@@ -119,7 +116,7 @@ public class PlayerListener implements Listener {
             boolean notHoldingAir = !player.getInventory().getItemInMainHand().getType().isAir();
 
             // The owner must be sneaking, left-clicking, and holding nothing to open the code menu
-            if (!player.isSneaking() || !action.equals(Action.LEFT_CLICK_BLOCK) || notHoldingAir) return;
+            if (!player.isSneaking() || !event.getAction().equals(Action.LEFT_CLICK_BLOCK) || notHoldingAir) return;
 
             // we're going to open the code menu to modify the code and authorized users
             new EditCodeMenu(jukebox, data.authorized(), data.code()).open(player);
