@@ -89,7 +89,7 @@ public class EnterCodeMenu extends ChestMenu {
 
         @Override
         public void onClick(@NotNull MenuButton button, @NotNull Player player, @NotNull InventoryClickEvent event) {
-            if (current.isEmpty()) return;
+            if (current.isEmpty() || current.length() == CODE_CHARACTER_LIMIT) return;
 
             boolean unlocked = current.equals(code);
             if (!unlocked) {

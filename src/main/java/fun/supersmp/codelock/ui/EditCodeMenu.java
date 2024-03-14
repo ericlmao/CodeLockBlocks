@@ -97,6 +97,11 @@ public class EditCodeMenu extends ChestMenu {
                 return;
             }
 
+            if (code.length() != CODE_CHARACTER_LIMIT) {
+                Locale.CODE_LENGTH.send(player);
+                return;
+            }
+
             if (original != null && original.equals(code)) {
                 player.closeInventory();
 
