@@ -32,7 +32,9 @@ public enum Locale {
     ALERTS_ON("<gold><b>ATTENTION!</b> <gray>You have toggled alerts <green>on</green>!"),
     ALERTS_OFF("<gold><b>ATTENTION!</b> <gray>You have toggled alerts <red>off</red>!"),
 
-    CODE_BLOCK_COMMAND("<newline><gold><b> CODELOCK <white>BLOCKS</white></gold> <newline> <gray><i> By Negative Games <newline><newline><yellow> /codeblock <white>togglealerts<white> <dark_gray>-</dark_gray> <gray>Toggle place notifications.");
+    CODE_BLOCK_COMMAND("<newline><gold><b> CODELOCK <white>BLOCKS</white></gold> <newline> <gray><i> By Negative Games <newline><newline><yellow> /codeblock <white>togglealerts<white> <dark_gray>-</dark_gray> <gray>Toggle place notifications."),
+
+    CODE_LENGTH("<gold><b>ATTENTION!</b> <gray>The code that you have entered is <red>too short</red>. Please try again!"),;
 
     private String content;
 
