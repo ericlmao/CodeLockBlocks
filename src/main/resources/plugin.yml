@@ -5,4 +5,4 @@ authors: [ "ericlmao" ]
 api-version: 1.20
 load: POSTWORLD
 
-depend: ["PlaceholderAPI"]
+depend: ["PlaceholderAPI", "floodgate"]

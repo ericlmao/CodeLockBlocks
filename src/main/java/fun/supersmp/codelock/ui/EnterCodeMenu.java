@@ -6,9 +6,12 @@ import fun.supersmp.codelock.core.Locale;
 import games.negative.alumina.builder.ItemBuilder;
 import games.negative.alumina.menu.ChestMenu;
 import games.negative.alumina.menu.MenuButton;
+import games.negative.alumina.util.ColorUtil;
 import games.negative.alumina.util.IntList;
+import games.negative.alumina.util.ItemUpdater;
 import games.negative.alumina.util.NBTEditor;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Player;
@@ -28,17 +31,33 @@ public class EnterCodeMenu extends ChestMenu {
     private final Jukebox data;
     private final String code;
     private String current;
-    public EnterCodeMenu(@NotNull Jukebox data, @Nullable String code) {
+    private final boolean isBedrockUser;
+    private MenuButton display = null;
+    public EnterCodeMenu(@NotNull Jukebox data, @Nullable String code, boolean isBedrockUser) {
         this.code = (code == null ? "" : code);
         this.current = "";
         this.data = data;
+        this.isBedrockUser = isBedrockUser;
 
         setRows(6);
         title();
         setCancelClicks(true);
 
+        // Only add the "display" button if the user is a Bedrock user
+        // due to differences in packets sent to the client
+        if (this.isBedrockUser) {
+            display = MenuButton.builder().slot(25).item(new ItemBuilder(Material.PAPER).setName("&f ").build()).build();
+            addButton(display);
+
+            updateDisplayItem();
+        }
+
         List<Integer> fillerSlots = IntList.getList(List.of("0-11", "15-20", "24-29", "33-39", "41-47", "49", "51-53"));
         for (int slot : fillerSlots) {
+            // Probably a better way to do this,
+            // but this is straightforward & quick.
+            if (this.isBedrockUser && slot == 25) continue;
+
             addButton(MenuButton.builder().slot(slot).item(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build()).build());
         }
 
@@ -70,6 +89,11 @@ public class EnterCodeMenu extends ChestMenu {
 
             current += character;
 
+            if (isBedrockUser) {
+                updateDisplayItem();
+                return;
+            }
+
             title();
         }
     }
@@ -81,6 +105,12 @@ public class EnterCodeMenu extends ChestMenu {
             if (current.isEmpty()) return;
 
             current = current.substring(0, current.length() - 1);
+
+            if (isBedrockUser) {
+                updateDisplayItem();
+                return;
+            }
+
             title();
         }
     }
@@ -89,7 +119,7 @@ public class EnterCodeMenu extends ChestMenu {
 
         @Override
         public void onClick(@NotNull MenuButton button, @NotNull Player player, @NotNull InventoryClickEvent event) {
-            if (current.isEmpty() || current.length() == CODE_CHARACTER_LIMIT) return;
+            if (current.isEmpty() || current.length() != CODE_CHARACTER_LIMIT) return;
 
             boolean unlocked = current.equals(code);
             if (!unlocked) {
@@ -127,4 +157,28 @@ public class EnterCodeMenu extends ChestMenu {
         updateTitle("Enter Code!" + (current.isEmpty() ? "" : " | " + current));
     }
 
+    @SuppressWarnings("deprecation") // Paper API Deprecation
+    private void updateDisplayItem() {
+        display.updateItem(itemStack -> {
+            ItemUpdater.of(itemStack, meta -> {
+                if (current == null || current.isEmpty()) {
+                    meta.setDisplayName(ChatColor.WHITE + " ");
+                    return;
+                }
+
+                // Split all characters of "code" into an array
+                char[] chars = current.toCharArray();
+
+                StringBuilder displayName = new StringBuilder();
+                for (char aChar : chars) {
+                    displayName.append(ChatColor.GREEN).append(aChar).append(" ");
+                }
+
+                meta.setDisplayName(ColorUtil.translate(displayName.toString()));
+            });
+
+            return itemStack;
+        });
+        refreshButton(display.getSlot());
+    }
 }

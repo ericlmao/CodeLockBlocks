@@ -49,10 +49,6 @@
                             <pattern>games.negative.alumina</pattern>
                             <shadedPattern>fun.supersmp.codelock.libs.alumina</shadedPattern>
                         </relocation>
-<!--                        <relocation>-->
-<!--                            <pattern>de.exlll.configlib</pattern>-->
-<!--                            <shadedPattern>fun.supersmp.codelock.libs.config</shadedPattern>-->
-<!--                        </relocation>-->
                     </relocations>
                 </configuration>
             </plugin>
@@ -131,20 +127,26 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- ConfigLib -->
-<!--        <dependency>-->
-<!--            <groupId>de.exlll</groupId>-->
-<!--            <artifactId>configlib-yaml</artifactId>-->
-<!--            <version>4.5.0</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-
         <!-- PlaceholderAPI -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.11.5</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Floodgate API -->
+        <dependency>
+            <groupId>org.geysermc.floodgate</groupId>
+            <artifactId>api</artifactId>
+            <version>2.2.2-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.geysermc.cumulus</groupId>
+                    <artifactId>cumulus</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

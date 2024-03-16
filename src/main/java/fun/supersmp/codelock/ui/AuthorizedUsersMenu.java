@@ -31,13 +31,15 @@ public class AuthorizedUsersMenu extends PaginatedMenu {
     private final Jukebox data;
     private final List<UUID> authorized;
     private final String code;
-    public AuthorizedUsersMenu(@NotNull Jukebox data, @NotNull List<UUID> authorized, @Nullable String code) {
+    private final boolean isBedrockUser;
+    public AuthorizedUsersMenu(@NotNull Jukebox data, @NotNull List<UUID> authorized, @Nullable String code, boolean isBedrockUser) {
         super("Authorized Users", 5);
         setCancelClicks(true);
 
         this.data = data;
         this.authorized = authorized;
         this.code = code;
+        this.isBedrockUser = isBedrockUser;
 
         List<Integer> fillerSlots = IntList.getList(List.of("0-9", "17-18", "26-27", "35-44"));
         for (int slot : fillerSlots) {
@@ -70,7 +72,7 @@ public class AuthorizedUsersMenu extends PaginatedMenu {
 
     @Override
     public void onClose(@NotNull Player player, @NotNull InventoryCloseEvent event) {
-        Tasks.run(() -> new EditCodeMenu(data, authorized, code).open(player), 2);
+        Tasks.run(() -> new EditCodeMenu(data, authorized, code, isBedrockUser).open(player), 2);
     }
 
     @RequiredArgsConstructor
