@@ -9,8 +9,6 @@ import fun.supersmp.codelock.struct.CodeLockBlock;
 import fun.supersmp.codelock.ui.EditCodeMenu;
 import fun.supersmp.codelock.ui.EnterCodeMenu;
 import games.negative.alumina.util.NBTEditor;
-import lombok.RequiredArgsConstructor;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -28,8 +26,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.PressureSensor;
 import org.bukkit.persistence.PersistentDataType;
+import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,8 +35,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class PlayerListener implements Listener {
+
+    private final FloodgateApi api;
+
+    public PlayerListener() {
+        this.api = FloodgateApi.getInstance();
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(@NotNull BlockPlaceEvent event) {
@@ -110,6 +113,7 @@ public class PlayerListener implements Listener {
         if (data == null) return;
 
         UUID uuid = player.getUniqueId();
+        boolean isBedrockPlayer = api.isFloodgatePlayer(uuid);
         if (player.hasPermission(Perm.ADMIN) || data.authorized().contains(uuid)) {
             if (!isOwner(data, uuid)) return;
 
@@ -119,7 +123,7 @@ public class PlayerListener implements Listener {
             if (!player.isSneaking() || !event.getAction().equals(Action.LEFT_CLICK_BLOCK) || notHoldingAir) return;
 
             // we're going to open the code menu to modify the code and authorized users
-            new EditCodeMenu(jukebox, data.authorized(), data.code()).open(player);
+            new EditCodeMenu(jukebox, data.authorized(), data.code(), isBedrockPlayer).open(player);
             return;
         }
 
@@ -127,7 +131,7 @@ public class PlayerListener implements Listener {
         event.setUseItemInHand(Event.Result.DENY);
         event.setCancelled(true);
 
-        new EnterCodeMenu(jukebox, data.code()).open(player);
+        new EnterCodeMenu(jukebox, data.code(), isBedrockPlayer).open(player);
     }
 
     /**
