@@ -63,20 +63,20 @@ public class EnterCodeMenu extends ChestMenu {
         }
 
         // 0-9 combination items
-        addButton(MenuButton.builder().slot(12).item(new ItemBuilder(Material.RED_WOOL).setName("&a1").build()).action(new NumberClickHandler('1')).build());
-        addButton(MenuButton.builder().slot(13).item(new ItemBuilder(Material.ORANGE_WOOL).setName("&a2").build()).action(new NumberClickHandler('2')).build());
-        addButton(MenuButton.builder().slot(14).item(new ItemBuilder(Material.YELLOW_WOOL).setName("&a3").build()).action(new NumberClickHandler('3')).build());
-        addButton(MenuButton.builder().slot(21).item(new ItemBuilder(Material.GREEN_WOOL).setName("&a4").build()).action(new NumberClickHandler('4')).build());
-        addButton(MenuButton.builder().slot(22).item(new ItemBuilder(Material.BLUE_WOOL).setName("&a5").build()).action(new NumberClickHandler('5')).build());
-        addButton(MenuButton.builder().slot(23).item(new ItemBuilder(Material.LIME_WOOL).setName("&a6").build()).action(new NumberClickHandler('6')).build());
-        addButton(MenuButton.builder().slot(30).item(new ItemBuilder(Material.LIGHT_BLUE_WOOL).setName("&a7").build()).action(new NumberClickHandler('7')).build());
-        addButton(MenuButton.builder().slot(31).item(new ItemBuilder(Material.PINK_WOOL).setName("&a8").build()).action(new NumberClickHandler('8')).build());
-        addButton(MenuButton.builder().slot(32).item(new ItemBuilder(Material.WHITE_WOOL).setName("&a9").build()).action(new NumberClickHandler('9')).build());
-        addButton(MenuButton.builder().slot(40).item(new ItemBuilder(Material.BLACK_WOOL).setName("&a0").build()).action(new NumberClickHandler('0')).build());
+        addButton(MenuButton.builder().slot(12).item(new ItemBuilder(Material.RED_WOOL).setName("<green>1").build()).action(new NumberClickHandler('1')).build());
+        addButton(MenuButton.builder().slot(13).item(new ItemBuilder(Material.ORANGE_WOOL).setName("<green>2").build()).action(new NumberClickHandler('2')).build());
+        addButton(MenuButton.builder().slot(14).item(new ItemBuilder(Material.YELLOW_WOOL).setName("<green>3").build()).action(new NumberClickHandler('3')).build());
+        addButton(MenuButton.builder().slot(21).item(new ItemBuilder(Material.GREEN_WOOL).setName("<green>4").build()).action(new NumberClickHandler('4')).build());
+        addButton(MenuButton.builder().slot(22).item(new ItemBuilder(Material.BLUE_WOOL).setName("<green>5").build()).action(new NumberClickHandler('5')).build());
+        addButton(MenuButton.builder().slot(23).item(new ItemBuilder(Material.LIME_WOOL).setName("<green>6").build()).action(new NumberClickHandler('6')).build());
+        addButton(MenuButton.builder().slot(30).item(new ItemBuilder(Material.LIGHT_BLUE_WOOL).setName("<green>7").build()).action(new NumberClickHandler('7')).build());
+        addButton(MenuButton.builder().slot(31).item(new ItemBuilder(Material.PINK_WOOL).setName("<green>8").build()).action(new NumberClickHandler('8')).build());
+        addButton(MenuButton.builder().slot(32).item(new ItemBuilder(Material.WHITE_WOOL).setName("<green>9").build()).action(new NumberClickHandler('9')).build());
+        addButton(MenuButton.builder().slot(40).item(new ItemBuilder(Material.BLACK_WOOL).setName("<green>0").build()).action(new NumberClickHandler('0')).build());
 
         // Backspace, Save, and Authorized Users buttons
-        addButton(MenuButton.builder().slot(48).item(new ItemBuilder(Material.ARROW).setName("&4&l← &c&lBackspace").build()).action(new BackspaceClickHandler()).build());
-        addButton(MenuButton.builder().slot(50).item(new ItemBuilder(Material.OAK_DOOR).setName("&2&l✔ &a&lSubmit").build()).action(new SubmitClickHandler()).build());
+        addButton(MenuButton.builder().slot(48).item(new ItemBuilder(Material.ARROW).setName("<dark_red><bold>←</dark_red> <red><bold>Backspace").build()).action(new BackspaceClickHandler()).build());
+        addButton(MenuButton.builder().slot(50).item(new ItemBuilder(Material.OAK_DOOR).setName("<dark_green><bold>✔</dark_green> <green><bold>Submit").build()).action(new SubmitClickHandler()).build());
     }
 
     @RequiredArgsConstructor
