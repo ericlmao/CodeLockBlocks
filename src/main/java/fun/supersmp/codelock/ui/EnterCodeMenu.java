@@ -6,12 +6,13 @@ import fun.supersmp.codelock.core.Locale;
 import games.negative.alumina.builder.ItemBuilder;
 import games.negative.alumina.menu.ChestMenu;
 import games.negative.alumina.menu.MenuButton;
-import games.negative.alumina.util.ColorUtil;
 import games.negative.alumina.util.IntList;
 import games.negative.alumina.util.ItemUpdater;
 import games.negative.alumina.util.NBTEditor;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Player;
@@ -157,24 +158,23 @@ public class EnterCodeMenu extends ChestMenu {
         updateTitle("Enter Code!" + (current.isEmpty() ? "" : " | " + current));
     }
 
-    @SuppressWarnings("deprecation") // Paper API Deprecation
     private void updateDisplayItem() {
         display.updateItem(itemStack -> {
             ItemUpdater.of(itemStack, meta -> {
                 if (current == null || current.isEmpty()) {
-                    meta.setDisplayName(ChatColor.WHITE + " ");
+                    meta.displayName(Component.text(" ").color(NamedTextColor.WHITE));
                     return;
                 }
 
                 // Split all characters of "code" into an array
                 char[] chars = current.toCharArray();
 
-                StringBuilder displayName = new StringBuilder();
+                TextComponent.Builder builder = Component.text();
                 for (char aChar : chars) {
-                    displayName.append(ChatColor.GREEN).append(aChar).append(" ");
+                    builder.append(Component.text(aChar).color(NamedTextColor.GREEN));
                 }
 
-                meta.setDisplayName(ColorUtil.translate(displayName.toString()));
+                meta.displayName(builder.build());
             });
 
             return itemStack;
