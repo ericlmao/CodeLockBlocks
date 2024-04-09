@@ -5,12 +5,13 @@ import fun.supersmp.codelock.core.Locale;
 import games.negative.alumina.builder.ItemBuilder;
 import games.negative.alumina.menu.ChestMenu;
 import games.negative.alumina.menu.MenuButton;
-import games.negative.alumina.util.ColorUtil;
 import games.negative.alumina.util.IntList;
 import games.negative.alumina.util.ItemUpdater;
 import games.negative.alumina.util.NBTEditor;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Player;
@@ -62,21 +63,21 @@ public class EditCodeMenu extends ChestMenu {
         }
 
         // 0-9 combination items
-        addButton(MenuButton.builder().slot(12).item(new ItemBuilder(Material.RED_WOOL).setName("&a1").build()).action(new NumberClickHandler('1')).build());
-        addButton(MenuButton.builder().slot(13).item(new ItemBuilder(Material.ORANGE_WOOL).setName("&a2").build()).action(new NumberClickHandler('2')).build());
-        addButton(MenuButton.builder().slot(14).item(new ItemBuilder(Material.YELLOW_WOOL).setName("&a3").build()).action(new NumberClickHandler('3')).build());
-        addButton(MenuButton.builder().slot(21).item(new ItemBuilder(Material.GREEN_WOOL).setName("&a4").build()).action(new NumberClickHandler('4')).build());
-        addButton(MenuButton.builder().slot(22).item(new ItemBuilder(Material.BLUE_WOOL).setName("&a5").build()).action(new NumberClickHandler('5')).build());
-        addButton(MenuButton.builder().slot(23).item(new ItemBuilder(Material.LIME_WOOL).setName("&a6").build()).action(new NumberClickHandler('6')).build());
-        addButton(MenuButton.builder().slot(30).item(new ItemBuilder(Material.LIGHT_BLUE_WOOL).setName("&a7").build()).action(new NumberClickHandler('7')).build());
-        addButton(MenuButton.builder().slot(31).item(new ItemBuilder(Material.PINK_WOOL).setName("&a8").build()).action(new NumberClickHandler('8')).build());
-        addButton(MenuButton.builder().slot(32).item(new ItemBuilder(Material.WHITE_WOOL).setName("&a9").build()).action(new NumberClickHandler('9')).build());
-        addButton(MenuButton.builder().slot(40).item(new ItemBuilder(Material.BLACK_WOOL).setName("&a0").build()).action(new NumberClickHandler('0')).build());
+        addButton(MenuButton.builder().slot(12).item(new ItemBuilder(Material.RED_WOOL).setName("<green>1").build()).action(new NumberClickHandler('1')).build());
+        addButton(MenuButton.builder().slot(13).item(new ItemBuilder(Material.ORANGE_WOOL).setName("<green>2").build()).action(new NumberClickHandler('2')).build());
+        addButton(MenuButton.builder().slot(14).item(new ItemBuilder(Material.YELLOW_WOOL).setName("<green>3").build()).action(new NumberClickHandler('3')).build());
+        addButton(MenuButton.builder().slot(21).item(new ItemBuilder(Material.GREEN_WOOL).setName("<green>4").build()).action(new NumberClickHandler('4')).build());
+        addButton(MenuButton.builder().slot(22).item(new ItemBuilder(Material.BLUE_WOOL).setName("<green>5").build()).action(new NumberClickHandler('5')).build());
+        addButton(MenuButton.builder().slot(23).item(new ItemBuilder(Material.LIME_WOOL).setName("<green>6").build()).action(new NumberClickHandler('6')).build());
+        addButton(MenuButton.builder().slot(30).item(new ItemBuilder(Material.LIGHT_BLUE_WOOL).setName("<green>7").build()).action(new NumberClickHandler('7')).build());
+        addButton(MenuButton.builder().slot(31).item(new ItemBuilder(Material.PINK_WOOL).setName("<green>8").build()).action(new NumberClickHandler('8')).build());
+        addButton(MenuButton.builder().slot(32).item(new ItemBuilder(Material.WHITE_WOOL).setName("<green>9").build()).action(new NumberClickHandler('9')).build());
+        addButton(MenuButton.builder().slot(40).item(new ItemBuilder(Material.BLACK_WOOL).setName("<green>0").build()).action(new NumberClickHandler('0')).build());
 
         // Backspace, Save, and Authorized Users buttons
-        addButton(MenuButton.builder().slot(47).item(new ItemBuilder(Material.ARROW).setName("&4&l← &c&lBackspace").build()).action(new BackspaceClickHandler()).build());
-        addButton(MenuButton.builder().slot(49).item(new ItemBuilder(Material.WRITABLE_BOOK).setName("&2&l✔ &a&lSave Code").build()).action(new SaveClickHandler()).build());
-        addButton(MenuButton.builder().slot(51).item(new ItemBuilder(Material.PLAYER_HEAD).setName("&3&l✯ &b&lAuthorized Users").build()).action(new AuthorizedUsersMenuClickHandler()).build());
+        addButton(MenuButton.builder().slot(47).item(new ItemBuilder(Material.ARROW).setName("<dark_red><bold>←</dark_red> <red><bold>Backspace").build()).action(new BackspaceClickHandler()).build());
+        addButton(MenuButton.builder().slot(49).item(new ItemBuilder(Material.WRITABLE_BOOK).setName("<dark_green><bold>✔</dark_green> <green><bold>Save Code").build()).action(new SaveClickHandler()).build());
+        addButton(MenuButton.builder().slot(51).item(new ItemBuilder(Material.PLAYER_HEAD).setName("<dark_aqua><bold>✯</dark_aqua> <aqua><bold>Authorized Users").build()).action(new AuthorizedUsersMenuClickHandler()).build());
     }
 
     @RequiredArgsConstructor
@@ -161,25 +162,24 @@ public class EditCodeMenu extends ChestMenu {
     private void title() {
         updateTitle("Enter Code!" + ((code == null || code.isEmpty()) ? "" : " | " + code));
     }
-
-    @SuppressWarnings("deprecation") // Paper API Deprecation
+    
     private void updateDisplayItem() {
         display.updateItem(itemStack -> {
             ItemUpdater.of(itemStack, meta -> {
                 if (code == null || code.isEmpty()) {
-                    meta.setDisplayName(ChatColor.WHITE + " ");
+                    meta.displayName(Component.text(" ").color(NamedTextColor.WHITE));
                     return;
                 }
 
                 // Split all characters of "code" into an array
                 char[] chars = code.toCharArray();
 
-                StringBuilder displayName = new StringBuilder();
+                TextComponent.Builder builder = Component.text();
                 for (char aChar : chars) {
-                    displayName.append(ChatColor.GREEN).append(aChar).append(" ");
+                    builder.append(Component.text(aChar).color(NamedTextColor.GREEN));
                 }
 
-                meta.setDisplayName(ColorUtil.translate(displayName.toString()));
+                meta.displayName(builder.build());
             });
 
             return itemStack;
