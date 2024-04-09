@@ -4,7 +4,6 @@ plugins {
 }
 
 def group = 'fun.supersmp'
-def version = '1.2.0'
 def id = 'CodeLock'
 
 repositories {
@@ -49,6 +48,7 @@ dependencies {
         exclude group: 'org.geysermc.cumulus', module: 'cumulus'
     }
 
+    implementation("games.negative.alumina:alumina:2.4.2")
 }
 
 def targetJavaVersion = 17
@@ -67,5 +67,19 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+}
+
+shadowJar {
+    archiveBaseName.set("${id}")
+    archiveClassifier.set("")
+    archiveVersion.set("")
+
+    relocate "games.negative.alumina", "${group}.libs.alumina"
 }
 
