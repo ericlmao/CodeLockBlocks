@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+def group = 'fun.supersmp'
+def version = '1.2.0'
+def id = 'CodeLock'
+
+repositories {
+    // Maven Central
+    mavenCentral()
+
+    // PaperMC Repository
+    maven { url = "https://repo.papermc.io/repository/maven-public/" }
+
+    // Sonatype Repository
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+
+    // Negative Games Repository
+    maven { url = "https://repo.negative.games/repository/maven-releases/" }
+
+    // Jitpack Repository
+    maven { url = "https://jitpack.io" }
+
+    // Open Collab Repository
+    maven { url = "https://repo.opencollab.dev/maven-snapshots" }
+
+    // Placeholder API Repository
+    maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
+}
+
+dependencies {
+    // Paper API
+    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+
+    // Jetbrains Annotations
+    compileOnly("org.jetbrains:annotations:24.1.0")
+
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
+
+    // Placeholder API
+    compileOnly("me.clip:placeholderapi:2.11.5")
+
+    // Floodgate API
+    compileOnly('org.geysermc.floodgate:api:2.2.2-SNAPSHOT') {
+        exclude group: 'org.geysermc.cumulus', module: 'cumulus'
+    }
+
+}
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
+
