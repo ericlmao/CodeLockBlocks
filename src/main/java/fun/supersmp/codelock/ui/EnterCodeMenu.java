@@ -7,7 +7,6 @@ import games.negative.alumina.builder.ItemBuilder;
 import games.negative.alumina.menu.ChestMenu;
 import games.negative.alumina.menu.MenuButton;
 import games.negative.alumina.util.IntList;
-import games.negative.alumina.util.ItemUpdater;
 import games.negative.alumina.util.NBTEditor;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -32,33 +31,23 @@ public class EnterCodeMenu extends ChestMenu {
     private final Jukebox data;
     private final String code;
     private String current;
-    private final boolean isBedrockUser;
-    private MenuButton display = null;
-    public EnterCodeMenu(@NotNull Jukebox data, @Nullable String code, boolean isBedrockUser) {
-        this.code = (code == null ? "" : code);
+    private final MenuButton display;
+
+    public EnterCodeMenu(@NotNull Jukebox data, @Nullable String code) {
+        super("Enter Code!", 6);
+        this.code = code;
         this.current = "";
         this.data = data;
-        this.isBedrockUser = isBedrockUser;
 
-        setRows(6);
-        title();
         setCancelClicks(true);
 
-        // Only add the "display" button if the user is a Bedrock user
-        // due to differences in packets sent to the client
-        if (this.isBedrockUser) {
-            display = MenuButton.builder().slot(25).item(new ItemBuilder(Material.PAPER).setName("&f ").build()).build();
-            addButton(display);
+        display = MenuButton.builder().slot(25).item(new ItemBuilder(Material.PAPER).setName("<white> ").build()).build();
+        addButton(display);
 
-            updateDisplayItem();
-        }
+        updateDisplayItem();
 
-        List<Integer> fillerSlots = IntList.getList(List.of("0-11", "15-20", "24-29", "33-39", "41-47", "49", "51-53"));
+        List<Integer> fillerSlots = IntList.getList(List.of("0-11", "15-20", "24", "26-29", "33-39", "41-47", "49", "51-53"));
         for (int slot : fillerSlots) {
-            // Probably a better way to do this,
-            // but this is straightforward & quick.
-            if (this.isBedrockUser && slot == 25) continue;
-
             addButton(MenuButton.builder().slot(slot).item(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build()).build());
         }
 
@@ -90,12 +79,7 @@ public class EnterCodeMenu extends ChestMenu {
 
             current += character;
 
-            if (isBedrockUser) {
-                updateDisplayItem();
-                return;
-            }
-
-            title();
+            updateDisplayItem();
         }
     }
 
@@ -107,12 +91,7 @@ public class EnterCodeMenu extends ChestMenu {
 
             current = current.substring(0, current.length() - 1);
 
-            if (isBedrockUser) {
-                updateDisplayItem();
-                return;
-            }
-
-            title();
+            updateDisplayItem();
         }
     }
 
@@ -154,13 +133,9 @@ public class EnterCodeMenu extends ChestMenu {
         }
     }
 
-    private void title() {
-        updateTitle("Enter Code!" + (current.isEmpty() ? "" : " | " + current));
-    }
-
     private void updateDisplayItem() {
         display.updateItem(itemStack -> {
-            ItemUpdater.of(itemStack, meta -> {
+            itemStack.editMeta(meta -> {
                 if (current == null || current.isEmpty()) {
                     meta.displayName(Component.text(" ").color(NamedTextColor.WHITE));
                     return;
@@ -179,6 +154,8 @@ public class EnterCodeMenu extends ChestMenu {
 
             return itemStack;
         });
+
         refreshButton(display.getSlot());
     }
+
 }

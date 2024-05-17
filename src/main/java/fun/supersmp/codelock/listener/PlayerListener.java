@@ -113,7 +113,6 @@ public class PlayerListener implements Listener {
         if (data == null) return;
 
         UUID uuid = player.getUniqueId();
-        boolean isBedrockPlayer = api.isFloodgatePlayer(uuid);
         if (player.hasPermission(Perm.ADMIN) || data.authorized().contains(uuid)) {
             if (!isOwner(data, uuid)) return;
 
@@ -123,7 +122,7 @@ public class PlayerListener implements Listener {
             if (!player.isSneaking() || !event.getAction().equals(Action.LEFT_CLICK_BLOCK) || notHoldingAir) return;
 
             // we're going to open the code menu to modify the code and authorized users
-            new EditCodeMenu(jukebox, data.authorized(), data.code(), isBedrockPlayer).open(player);
+            new EditCodeMenu(jukebox, data.authorized(), data.code()).open(player);
             return;
         }
 
@@ -131,7 +130,7 @@ public class PlayerListener implements Listener {
         event.setUseItemInHand(Event.Result.DENY);
         event.setCancelled(true);
 
-        new EnterCodeMenu(jukebox, data.code(), isBedrockPlayer).open(player);
+        new EnterCodeMenu(jukebox, data.code()).open(player);
     }
 
     /**

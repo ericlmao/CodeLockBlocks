@@ -31,25 +31,23 @@ public class AuthorizedUsersMenu extends PaginatedMenu {
     private final Jukebox data;
     private final List<UUID> authorized;
     private final String code;
-    private final boolean isBedrockUser;
-    public AuthorizedUsersMenu(@NotNull Jukebox data, @NotNull List<UUID> authorized, @Nullable String code, boolean isBedrockUser) {
+    public AuthorizedUsersMenu(@NotNull Jukebox data, @NotNull List<UUID> authorized, @Nullable String code) {
         super("Authorized Users", 5);
         setCancelClicks(true);
 
         this.data = data;
         this.authorized = authorized;
         this.code = code;
-        this.isBedrockUser = isBedrockUser;
 
         List<Integer> fillerSlots = IntList.getList(List.of("0-9", "17-18", "26-27", "35-44"));
         for (int slot : fillerSlots) {
             addButton(MenuButton.builder().slot(slot).item(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build()).build());
         }
 
-        ItemStack next = new ItemBuilder(Material.ARROW).setName("&a&lNext Page &2&l→").build();
+        ItemStack next = new ItemBuilder(Material.ARROW).setName("<green><b>Next Page <dark_green><b>→").build();
         setNextPageButton(MenuButton.builder().slot(26).item(next).action((button, player, event) -> changePage(player, page + 1)).build());
 
-        ItemStack previous = new ItemBuilder(Material.ARROW).setName("&4&l← &c&lPrevious Page").build();
+        ItemStack previous = new ItemBuilder(Material.ARROW).setName("<dark_red><b>← <red><b>Previous Page").build();
         setPreviousPageButton(MenuButton.builder().slot(18).item(previous).action((button, player, event) -> changePage(player, page - 1)).build());
 
         setPaginatedSlots(IntList.getList(List.of("10-16", "19-25", "28-34")));
@@ -61,8 +59,8 @@ public class AuthorizedUsersMenu extends PaginatedMenu {
 
             ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
             builder.setSkullOwner(player);
-            builder.setName("&e" + name);
-            builder.setLore("&7Click to remove this user");
+            builder.setName("<yellow>" + name);
+            builder.setLore("<gray>Click to remove this user");
 
             return MenuButton.builder().item(builder.build()).action(new RemoveUserClickHandler(input)).build();
         });
@@ -72,7 +70,7 @@ public class AuthorizedUsersMenu extends PaginatedMenu {
 
     @Override
     public void onClose(@NotNull Player player, @NotNull InventoryCloseEvent event) {
-        Tasks.run(() -> new EditCodeMenu(data, authorized, code, isBedrockUser).open(player), 2);
+        Tasks.run(() -> new EditCodeMenu(data, authorized, code).open(player), 2);
     }
 
     @RequiredArgsConstructor
